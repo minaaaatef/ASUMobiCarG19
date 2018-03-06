@@ -4,17 +4,16 @@ int holes=3;//holes on wheel
 void count()
 {x=x+1;
   }
-  void exact (float dist,float velocity)
-  {float dist2=(2*3.14*x*r*)/holes;//distance calculated 
-   float decrease=((velocity)*(velocity))/2*dist;//acceleration to  stop 
-   
-   while(dist2!=dist)
-   {
-    forward (velocity);
-    velocity=velocity-decrease;
+  void exact (float dist)
+  {
+    int n=(dist/2*3.14*r)*holes;
+   //move with velocity 4
+   if(x==0.90*n)
+   {//move with velocity 2
    }
-  
- 
+
+    if (x==n)
+      stop ();
     }
 void setup() {
   pinMode(2,OUTPUT);//interrupt pin
