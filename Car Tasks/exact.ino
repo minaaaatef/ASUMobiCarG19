@@ -1,6 +1,6 @@
-int x=0//counter variable
-int r=6//raduis of wheel
-int holes=3//holes on wheel
+int x=0;//counter variable
+int r=6;//raduis of wheel
+int holes=3;//holes on wheel
 void count()
 {x=x+1;
   }
