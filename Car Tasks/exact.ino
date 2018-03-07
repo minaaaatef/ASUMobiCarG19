@@ -7,13 +7,13 @@ void count()
   void exact (float dist)
   {
     int n=(dist/2*3.14*r)*holes;
-   //move with velocity 4
+   motor (f,4);
    if(x==0.90*n)
-   {//move with velocity 2
+   {motor (f,2);
    }
 
     if (x==n)
-      stop ();
+      stopcar();
     }
 void setup() {
   pinMode(2,OUTPUT);//interrupt pin
