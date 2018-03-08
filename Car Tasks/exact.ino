@@ -8,7 +8,7 @@ void count()
   {
     int n=(dist/2*3.14*r)*holes;
    motor (f,4);
-   if(x==0.90*n)
+   if(x==0.90*(float)n)
    {motor (f,2);
    }
 
