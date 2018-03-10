@@ -41,8 +41,7 @@ ultraservo.attach(servopin);      // attach the signal pin of servo to pin9 of a
 if(Serial.available())
   {
      data = Serial.read();
-     if(data=='a'){Easy_drive ();}
- 
+     if(data=='a') Easy_drive();
   }
 }
 
@@ -74,50 +73,20 @@ void motor(char Mdirection,int MSpeed)
  if (Mdirection=='f')
   {
     digitalWrite(MenablePin,HIGH);
-    if (MSpeed==1)
-      {
-       analogWrite(MspeedPin, 51);
-      }
-       if (MSpeed==2)
-      {
-       analogWrite(MspeedPin, 102);
-      }
-       if (MSpeed==3)
-      {
-       analogWrite(MspeedPin, 153);
-      }
-        if (Mdirection==3)
-      {
-       analogWrite(MspeedPin, 204);
-      }
-        if (MSpeed==5)
-      {
-       analogWrite(MspeedPin, 255);
-      }
+    if (MSpeed==1) analogWrite(MspeedPin, 51);
+    if (MSpeed==2) analogWrite(MspeedPin, 102);
+    if (MSpeed==3) analogWrite(MspeedPin, 153);
+    if (MSpeed==3) analogWrite(MspeedPin, 204);
+    if (MSpeed==5) analogWrite(MspeedPin, 255);
   }
 else if(Mdirection=='b')
   {
     digitalWrite(MenablePin,LOW);
-    if (MSpeed==1)
-      {
-       analogWrite(MspeedPin, 51);
-      }
-       if (MSpeed==2)
-      {
-       analogWrite(MspeedPin, 102);
-      }
-       if (MSpeed==3)
-      {
-       analogWrite(MspeedPin, 153);
-      }
-        if (MSpeed==3)
-      {
-       analogWrite(MspeedPin, 204);
-      }
-        if (MSpeed==5)
-      {
-       analogWrite(MspeedPin, 255);
-      }
+    if (MSpeed==1) analogWrite(MspeedPin, 51);
+    if (MSpeed==2) analogWrite(MspeedPin, 102);
+    if (MSpeed==3) analogWrite(MspeedPin, 153);
+    if (MSpeed==3) analogWrite(MspeedPin, 204);
+    if (MSpeed==5) analogWrite(MspeedPin, 255);
   }
 }
 
@@ -214,7 +183,7 @@ void Easy_drive ()
   {
   
     dis = ultra();
-    if((dis<300)&&(MovingForward=1))
+    if((dis<200)&&(MovingForward=1))
     {
       motor('f',2);
       ObstaclAevoiding();
@@ -234,7 +203,7 @@ void Easy_drive ()
       if((data=='F')&&(Mspeed<5)) {Mspeed++;}
       if((data=='B')&&(Mspeed>1)) {Mspeed--;}
 	    if(data=='a') {return;}
-  }  
+   }  
   
 }
 }
