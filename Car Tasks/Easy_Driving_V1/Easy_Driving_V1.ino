@@ -3,14 +3,15 @@
 //Global Variable Starts
 //====================================================
 char data;
-const int MspeedPin = 3;
-const int MenablePin = 4;
-const int IN1=11;
-const int IN2=3;
+const int IN1 = 3;
+const int IN2 = 5;
+const int IN3=6;
+const int IN4=11;
 const int TrigerUltra = 8;
-const int EchoUltra = 7;
-const int servopin =9;
+const int EchoUltra = 9;
+const int servopin =13;
 Servo ultraservo;
+int dis1;
 //====================================================
 //Global Variable Ends
 //====================================================
@@ -19,49 +20,63 @@ void setup()
 {
  Serial.begin(9600);
 
-// Ultra setup starts
+// Ultra setup start
  pinMode(TrigerUltra, OUTPUT);
 pinMode(EchoUltra, INPUT); 
 digitalWrite(TrigerUltra, LOW);
 // Ultra setup ends
-
 // motors setup starts
-pinMode(MspeedPin,OUTPUT);
-pinMode(MenablePin,OUTPUT);
- pinMode(IN1,OUTPUT);
- pinMode(IN2,OUTPUT);
+pinMode(IN1,OUTPUT);
+pinMode(IN2,OUTPUT);
+ pinMode(IN3,OUTPUT);
+ pinMode(IN4,OUTPUT);
 // motors setup ends
 
-ultraservo.attach(servopin);      // attach the signal pin of servo to pin9 of arduino
+ultraservo.attach(13);      // attach the signal pin of servo to pin9 of arduino
+ultraservo.write(90);
 }
 
   
   void loop()
 {
+  
+  Serial.write('a');
 if(Serial.available())
   {
      data = Serial.read();
      if(data=='a') Easy_drive();
   }
+  
+  // dis1 = ultra();
+ // Serial.write(dis1);
+  //delay(5000);
+
+
+
+
+  
+//  delay(1000);
+//ultraservo.write(10);
 }
 
 void GoRight (int degree)
 {
-  digitalWrite(IN2,HIGH);
-  if(degree == 1 )  analogWrite(IN1,128);
-  if(degree == 2 )  analogWrite(IN1,225);
+  digitalWrite(IN3,LOW);
+  if(degree == 1 )  analogWrite(IN4,128);
+  if(degree == 2 )  analogWrite(IN4,225);
 }
+
 void GoLeft (int degree)
 {
-  digitalWrite(IN2,LOW);
-  if(degree == 1 )  analogWrite(IN1,128);
-  if(degree == 2 )  analogWrite(IN1,225);
+  digitalWrite(IN4,LOW);
+  if(degree == 1 )  analogWrite(IN3,128);
+  if(degree == 2 )  analogWrite(IN3,225);
   
 }
 void GoStraight ()
 {
-  digitalWrite(IN1,LOW);
-  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,LOW);
   
 }
 
@@ -72,28 +87,30 @@ void motor(char Mdirection,int MSpeed)
 {
  if (Mdirection=='f')
   {
-    digitalWrite(MenablePin,HIGH);
-    if (MSpeed==1) analogWrite(MspeedPin, 51);
-    if (MSpeed==2) analogWrite(MspeedPin, 102);
-    if (MSpeed==3) analogWrite(MspeedPin, 153);
-    if (MSpeed==3) analogWrite(MspeedPin, 204);
-    if (MSpeed==5) analogWrite(MspeedPin, 255);
+    digitalWrite(IN1,LOW);
+   
+    if (MSpeed==1) analogWrite(IN2, 51);
+    if (MSpeed==2) analogWrite(IN2, 102);
+    if (MSpeed==3) analogWrite(IN2, 153);
+    if (MSpeed==3) analogWrite(IN2, 204);
+    if (MSpeed==5) analogWrite(IN2, 255);
+    
   }
 else if(Mdirection=='b')
   {
-    digitalWrite(MenablePin,LOW);
-    if (MSpeed==1) analogWrite(MspeedPin, 51);
-    if (MSpeed==2) analogWrite(MspeedPin, 102);
-    if (MSpeed==3) analogWrite(MspeedPin, 153);
-    if (MSpeed==3) analogWrite(MspeedPin, 204);
-    if (MSpeed==5) analogWrite(MspeedPin, 255);
+    digitalWrite(IN2,LOW);
+    if (MSpeed==1) analogWrite(IN1, 51);
+    if (MSpeed==2) analogWrite(IN1, 102);
+    if (MSpeed==3) analogWrite(IN1, 153);
+    if (MSpeed==3) analogWrite(IN1, 204);
+    if (MSpeed==5) analogWrite(IN1, 255);
   }
 }
 
 void stop ()
 {
-  digitalWrite(MspeedPin,LOW);
-  digitalWrite(MenablePin,LOW);
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,LOW);
 }
 
 
@@ -126,6 +143,7 @@ void ObstaclAevoiding()
         {
           GoRight(1);
           while(dis<400){dis=ultra();}
+          delay(1000);
           GoStraight();
          return;
         }
@@ -183,12 +201,15 @@ void Easy_drive ()
   {
   
     dis = ultra();
-    if((dis<200)&&(MovingForward=1))
+    if(MovingForward==1)
+    {
+      if (dis<200)
     {
       motor('f',2);
       ObstaclAevoiding();
 	  motor('f',Mspeed);
     }
+}
     if(Serial.available())
     {
       data = Serial.read();
