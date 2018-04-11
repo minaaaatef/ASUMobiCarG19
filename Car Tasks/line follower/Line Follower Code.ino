@@ -8,15 +8,15 @@ const int motorLPin2 = 7; // signal pin 2 for the left motor, connect to IN4
 const int motorLEnable = 6; // enable pin for the left motor (needs to be PWM enabled)
 
 /* Define the pins for the IR receivers */
-const int irPins[6] = {A0, A1, A2, A3, A4, A5};
+const int irPins[3] = {A0, A1, A2};
 
 /* Define values for the IR Sensor readings */
 
 // an array to hold values from analogRead on the ir sensor (0-1023)
-int irSensorAnalog[6] = {0,0,0,0,0,0};
+int irSensorAnalog[3] = {0,0,0};
 
 // an array to hold boolean values (1/0) for the ir sensors, based on the analog read and the predefined treashold
-int irSensorDigital[6] = {0,0,0,0,0,0}; 
+int irSensorDigital[3] = {0,0,0}; 
 
 // the value above which we determine an IR sensor reading indicates the sensor is over a line
 int treashold = 700; 
@@ -60,7 +60,7 @@ void setup() {
   pinMode(motorREnable,OUTPUT);
    
   /* Set-up IR sensor pins as input */
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 3; i++) {
     pinMode(irPins[i], INPUT);
   }
   
@@ -96,7 +96,7 @@ void Scan() {
   
   irSensors = B000000;
     
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 3; i++) {
     irSensorAnalog[i] = analogRead(irPins[i]);
 
     if (irSensorAnalog[i] >= treashold) {
