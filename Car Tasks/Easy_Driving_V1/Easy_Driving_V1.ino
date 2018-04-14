@@ -1,3 +1,4 @@
+{ // Global Variable
 #include <Servo.h>
 //====================================================
 //Global Variable Starts
@@ -11,14 +12,15 @@ const int TrigerUltra = 8;
 const int EchoUltra = 9;
 const int servopin =13;
 Servo ultraservo;
-int dis1;
 
-int L = ;
-int R = ; 
-int C = ; 
+int LS = A0;
+int RS = A1;
+int CS = A2;
+
 //====================================================
 //Global Variable Ends
 //====================================================
+}
 
 void setup() 
 {
@@ -29,21 +31,27 @@ void setup()
 pinMode(EchoUltra, INPUT); 
 digitalWrite(TrigerUltra, LOW);
 // Ultra setup ends
+
+
 // motors setup starts
 pinMode(IN1,OUTPUT);
 pinMode(IN2,OUTPUT);
  pinMode(IN3,OUTPUT);
  pinMode(IN4,OUTPUT);
 // motors setup ends
+
+
 // line follower setup starts 
-pinMode(L,INPUT);
-pinMode(R,INPUT);
-pinMode(C,INPUT);
+pinMode(LS,INPUT);
+pinMode(RS,INPUT);
+pinMode(CS,INPUT);
 // line follower setup ends
 
 
-
 ultraservo.attach(13);      // attach the signal pin of servo to pin9 of arduino
+
+
+//servo starting xD xD
 ultraservo.write(0);
 delay(500);
 ultraservo.write(90);
@@ -53,8 +61,7 @@ delay(500);
 ultraservo.write(90);
 }
 
-  
-  void loop()
+void loop()
 {
  
   Serial.write('a');
@@ -62,22 +69,10 @@ if(Serial.available())
   {
      data = Serial.read();
      if(data=='a') Easy_drive();
+     if(data=='b') linefollower ();
+     
   }
   
-  // dis1 = ultra();
- // Serial.write(dis1);
-  //delay(5000);
-
- /*
-
-int test;
-test=freesearching();
-Serial.print(test, DEC);
-ultraservo.write(90);
-delay(100);
- */ 
-//  delay(1000);
-//ultraservo.write(10);
 
 }
 
@@ -95,15 +90,13 @@ void GoLeft (int degree)
   if(degree == 2 )  analogWrite(IN3,225);
   
 }
+
 void GoStraight ()
 {
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,LOW);
   
 }
-
-
-
 
 void motor(char Mdirection,int MSpeed)
 {
@@ -135,7 +128,6 @@ void stop ()
   digitalWrite(IN2,LOW);
 }
 
-
 int ultra()
 {
 double Time;
@@ -149,92 +141,6 @@ Distance= Time*0.01715;
 return Distance;
 }
 
-/*
-void ObstaclAevoiding()
-{
-  int angle =0;
-  int dis;
-  for(angle = 90; angle < 180; angle+=5)   
-  {                                  
-    ultraservo.write(angle);
-    dis = ultra();
-    if (dis>200) 
-    {
-		ultraservo.write(90);
-     delay (100);
-        if (angle<135) 
-        {
-          GoRight(1);
-           dis = ultra();
-          while(dis<300)
-          {
-            dis=ultra();
-           if (dis<100){stop();break;} 
-          }
-        //  delay(1000);
-          GoStraight();
-         return;
-        }
-                if (angle>135) 
-        {
-          GoRight(2);
-          dis = ultra();
-          while(dis<300)
-          {
-            dis=ultra();
-           if (dis<100){stop();break;} 
-          }
-          GoStraight();
-          return;
-        }
-    }
-    delay(15);                       
-  }
-ultraservo.write(90);
-   
-  for(angle = 90; angle > 0; angle-=5)   
-  {                                  
-    ultraservo.write(angle);
-    dis = ultra();
-    if (dis>200)
-    {
-		ultraservo.write(90);
-   delay (100);
-        if (angle>45) 
-        {
-          GoLeft(1);
-          dis = ultra();
-          while(dis<300)
-          {
-            dis=ultra();
-           if (dis<100){stop();break;} 
-          }
-          GoStraight();
-         return;
-        }
-		if (angle<45) 
-        {
-          GoLeft(2);
-          dis = ultra();
-              while(dis<300)
-          {
-            dis=ultra();
-           if (dis<100){stop();break;} 
-          }
-          GoStraight();
-          return;
-        }
-    }
-    delay(15);                       
-  } 
-  
-
-
-}
-
-*/
-
-
 int freesearching()
 {
 int x,test;
@@ -247,7 +153,6 @@ if (test>400) return x;
 }
 stop();
 }
-
 
 void obsticle ()
 {
@@ -263,8 +168,6 @@ void obsticle ()
   delay(5000);
   GoStraight();
 }
-
-
 
 void Easy_drive ()
 {
@@ -302,20 +205,32 @@ void Easy_drive ()
 
 void linefollower ()
 {
-  motor('f',2);
-  if(digitalRead(L)==1)
+  if(Serial.available())
   {
-    GoLeft(2);
-    while(digitalRead(C)==0){delay(50);}
-    GoStraight;
+     data = Serial.read();
+     if(data=='b') return;   
   }
-    if(digitalRead(R)==1)
+
+  
+  motor('f';2)
+  if(digitalRead(LS) && digitalRead(RS))     // Move Forward
   {
-    GoRight(2);
-    while(digitalRead(C)==0){delay(50;}
-    GoStraight;
+   GoStraight (); 
+  }
+  
+  if(!(digitalRead(LS)) && digitalRead(RS))     // Turn right
+  {
+    GoRight (2);
+  }
+  
+  if(digitalRead(LS) && !(digitalRead(RS)))     // turn left
+  {
+    GoLeft (2);
+  }
+  
+  if(!(digitalRead(LS)) && !(digitalRead(RS)) && !(digitalRead(CS)) )     // stop
+  {
+    stop (); 
   }
 }
-
-
 
