@@ -1,4 +1,4 @@
-{ // Global Variable
+ // Global Variable
 #include <Servo.h>
 //====================================================
 //Global Variable Starts
@@ -20,7 +20,7 @@ int CS = A2;
 //====================================================
 //Global Variable Ends
 //====================================================
-}
+
 
 void setup() 
 {
@@ -72,7 +72,8 @@ if(Serial.available())
      if(data=='b') linefollower ();
      
   }
-  
+  int dis123 = ultra();
+  Serial.print(dis123, DEC);
 
 }
 
@@ -197,7 +198,7 @@ void Easy_drive ()
       if(data=='s') {stop();MovingBack=0;MovingForward=0;}
       if((data=='F')&&(Mspeed<5)) {Mspeed++;}
       if((data=='B')&&(Mspeed>1)) {Mspeed--;}
-	    if(data=='a') {return;}
+      if(data=='a') {return;}
    }  
   
 }
@@ -205,6 +206,9 @@ void Easy_drive ()
 
 void linefollower ()
 {
+   motor('f',2);
+   while(1)
+   {
   if(Serial.available())
   {
      data = Serial.read();
@@ -212,25 +216,28 @@ void linefollower ()
   }
 
   
-  motor('f';2)
-  if(digitalRead(LS) && digitalRead(RS))     // Move Forward
+ 
+  if(!digitalRead(LS) && !digitalRead(RS))     // Move Forward
   {
-   GoStraight (); 
+   GoStraight(); 
   }
   
-  if(!(digitalRead(LS)) && digitalRead(RS))     // Turn right
+  if((digitalRead(LS)) && !digitalRead(RS))     // Turn right
   {
     GoRight (2);
   }
   
-  if(digitalRead(LS) && !(digitalRead(RS)))     // turn left
+  if(!digitalRead(LS) && (digitalRead(RS)))     // turn left
   {
     GoLeft (2);
   }
   
-  if(!(digitalRead(LS)) && !(digitalRead(RS)) && !(digitalRead(CS)) )     // stop
+  if((digitalRead(LS)) && (digitalRead(RS)) && (digitalRead(CS)) )     // stop
   {
     stop (); 
+    GoStraight(); 
   }
+   }
 }
+
 
