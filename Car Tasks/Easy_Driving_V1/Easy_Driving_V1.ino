@@ -63,7 +63,7 @@ ultraservo.write(90);
 
 void loop()
 {
- 
+ /*
   Serial.write('a');
 if(Serial.available())
   {
@@ -74,7 +74,8 @@ if(Serial.available())
   }
   int dis123 = ultra();
   Serial.print(dis123, DEC);
-
+  */
+linefollower ();
 }
 
 void GoRight (int degree)
@@ -208,36 +209,43 @@ void linefollower ()
 {
    motor('f',2);
    while(1)
-   {
+  {
   if(Serial.available())
   {
      data = Serial.read();
      if(data=='b') return;   
   }
-
-  
  
-  if(!digitalRead(LS) && !digitalRead(RS))     // Move Forward
+  if((!digitalRead(LS) && !digitalRead(RS) && digitalRead(CS))||(digitalRead(LS) && digitalRead(RS)&& !digitalRead(CS)))     // Move Forward
   {
+   motor('f',2);
    GoStraight(); 
   }
   
-  if((digitalRead(LS)) && !digitalRead(RS))     // Turn right
+  if(((digitalRead(LS)) && !digitalRead(RS)&& !digitalRead(CS)))     // Turn right
   {
+     motor('f',2);
     GoRight (2);
+     Serial.print("Right");
+    while(!digitalRead(CS)){Serial.print("Right while");}
   }
   
-  if(!digitalRead(LS) && (digitalRead(RS)))     // turn left
+  if((!digitalRead(LS) && (digitalRead(RS))&& !digitalRead(CS)))     // turn left
   {
+    Serial.print("left");
+     motor('f',2);
     GoLeft (2);
+    while(!digitalRead(CS)){Serial.print("LEFT while");}
   }
   
-  if((digitalRead(LS)) && (digitalRead(RS)) && (digitalRead(CS)) )     // stop
+  if((digitalRead(LS)) && (digitalRead(RS)) && !(digitalRead(CS)) )     // stop
   {
     stop (); 
     GoStraight(); 
   }
-   }
+ }
 }
+
+
 
 
